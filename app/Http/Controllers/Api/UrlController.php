@@ -14,9 +14,7 @@ class UrlController extends ApiController
     {
     }
 
-    /**
-     * 📄 لیست کاربران
-     */
+
     public function index(Request $request)
     {
         $urls = $this->urlService->list($request);
