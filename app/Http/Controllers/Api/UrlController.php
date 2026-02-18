@@ -1,10 +1,11 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api;
 
+use App\Http\Controllers\ApiController;
 use App\Http\Requests\CreateUrlRequest;
 use App\Http\Resources\UrlResource;
-use App\Http\Services\UrlService;
+use App\Services\UrlService;
 use Illuminate\Http\Request;
 
 /**
