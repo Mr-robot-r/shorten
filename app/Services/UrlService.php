@@ -3,7 +3,7 @@
 namespace App\Http\Services;
 
 use App\Models\ShortUrl;
-use Illuminate\Http\Client\Request;
+use Illuminate\Http\Request;
 
 class UrlService
 {
@@ -11,8 +11,8 @@ class UrlService
     public function list(Request $request)
     {
         $query = ShortUrl::query();
-        $perPage = $request->get('perPage');
-        $Page = $request->get('Page');
+        $perPage = $request->input('perPage') ?? 20;
+        $Page = $request->input('Page');
         return $perPage
             ? $query->paginate($perPage)
             : $query->get();
@@ -26,10 +26,9 @@ class UrlService
 
     public function create(array $data)
     {
+        $data['short_url'] = ShortUrl::generateUniqueShortCode();
         $url = ShortUrl::create($data);
         return $url;
-
-
     }
     public function update(array $data, int $id)
     {

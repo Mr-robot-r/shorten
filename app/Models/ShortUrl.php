@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Str;
 
 class ShortUrl extends Model
 {
@@ -20,7 +21,7 @@ class ShortUrl extends Model
      */
     protected $fillable = [
         "original_url",
-        "short_code",
+        "short_url",
         "status",
         "click",
     ];
@@ -47,5 +48,13 @@ class ShortUrl extends Model
     ];
 
 
+    public function generateUniqueShortCode(): string
+    {
+        do {
+            $code = Str::random(6);
+        } while (ShortUrl::where('short_url', $code)->exists());
+
+        return $code;
+    }
 
 }

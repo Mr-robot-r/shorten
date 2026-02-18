@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\CreateUrlRequest;
+use App\Http\Resources\UrlResource;
+use App\Http\Services\UrlService;
 use Illuminate\Http\Request;
 
 class UrlController extends ApiController
@@ -14,51 +17,36 @@ class UrlController extends ApiController
     /**
      * 📄 لیست کاربران
      */
-    public function index(Request $request, int $perPage = 20)
+    public function index(Request $request)
     {
-        $users = $this->urlService->getAll($request, $perPage);
-        $response = UrlResource::collection($users)
+        $urls = $this->urlService->list($request);
+        $response = UrlResource::collection($urls)
             ->response()
             ->getData(true);
 
         unset($response['links']);
         return $this->responseSuccess('get data successfully', $response);
     }
-    public function show(int $id, Request $request)
+    public function show(int $id)
     {
-        $user = $this->urlService->find($id, $request);
-        return $this->responseSuccess('get data successfully', new UserResource($user));
+        $urls = $this->urlService->show($id);
+        return $this->responseSuccess('get data successfully', new UrlResource($urls));
     }
 
-    public function store(CreateUrlRequest $request, int $id)
+    public function store(CreateUrlRequest $request)
     {
-        $user = $this->urlService->create($id, $request->validated());
+        $data = $request->validated();
+        $data['original_url'] = $data['url'];
+        unset($data['url']);
 
-        $this->user_activity(
-            'update Profile',
-            'update Profile Successfully'
-        );
+        $user = $this->urlService->create($data);
+
         return $this->responseCreated('item successfully created', new UrlResource($user));
-    }
-    public function update(UpdateUrlRequest $request, int $id)
-    {
-        $user = $this->urlService->update($id, $request->validated());
-
-        $this->user_activity(
-            'update Profile',
-            'update Profile Successfully'
-        );
-        return $this->responseCreated('item successfully updated', new UrlResource($user));
     }
     public function delete(int $id)
     {
-        $user = $this->urlService->delete($id);
-
-        $this->user_activity(
-            'update Profile',
-            'update Profile Successfully'
-        );
-        return $this->responseCreated(__('message.item successfully created'), new UrlResource($user));
+        $url = $this->urlService->delete($id);
+        return $this->responseSuccess('item successfully deleted');
     }
 
 

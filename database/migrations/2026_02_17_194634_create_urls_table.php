@@ -13,8 +13,8 @@ return new class extends Migration {
         Schema::create('urls', function (Blueprint $table) {
             $table->id();
             $table->string("original_url");
-            $table->string("short_code");
-            $table->integer("click");
+            $table->string("short_url")->unique();
+            $table->integer("click")->default(0);
             $table->enum('status', ['active', 'nonactive'])->default('active');
             $table->timestamps();
         });
