@@ -12,7 +12,6 @@ class UrlService
     {
         $query = ShortUrl::query();
         $perPage = $request->input('perPage') ?? 20;
-        $Page = $request->input('Page');
         return $perPage
             ? $query->paginate($perPage)
             : $query->get();

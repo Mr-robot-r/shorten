@@ -10,6 +10,14 @@ class ApiController extends BaseController
 {
     use ApiResponse;
 
+        /**
+     * @OA\Info(
+     *    title="shorten",
+     *    version="1.0.0",
+     * )
+     * 
+     *
+     **/
 
 
 }
