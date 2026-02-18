@@ -10,14 +10,13 @@ class ApiController extends BaseController
 {
     use ApiResponse;
 
-        /**
+    /**
      * @OA\Info(
-     *    title="shorten",
+     *    title="Shorten URL API",
      *    version="1.0.0",
+     *    description="API documentation for shorten url"
      * )
-     * 
-     *
-     **/
+     */
 
 
 }

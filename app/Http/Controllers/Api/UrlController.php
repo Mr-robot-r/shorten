@@ -14,7 +14,7 @@ use Illuminate\Http\Request;
  *     description="Endpoints for managing Url"
  * )
  */
-class UrlController extends ApiController
+class UrlController extends ApiController 
 {
     public function __construct(private readonly UrlService $urlService)
     {
