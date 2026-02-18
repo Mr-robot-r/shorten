@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
-class UrlController extends Controller
+class UrlController extends ApiController
 {
 
     public function __construct(private readonly UrlService $urlService)
