@@ -110,7 +110,7 @@ class UrlController extends ApiController
     }
     /**
      * @OA\Post(
-     *      path="/manager/urls",
+     *      path="/url",
      *      operationId="urlstore",
      *      tags={"Url"},
      *      summary="store urls",
