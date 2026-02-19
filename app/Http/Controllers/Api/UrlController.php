@@ -6,6 +6,7 @@ use App\Http\Controllers\ApiController;
 use App\Http\Requests\CreateUrlRequest;
 use App\Http\Resources\UrlResource;
 use App\Services\UrlService;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 
 /**
@@ -14,7 +15,7 @@ use Illuminate\Http\Request;
  *     description="Endpoints for managing Url"
  * )
  */
-class UrlController extends ApiController 
+class UrlController extends ApiController
 {
     public function __construct(private readonly UrlService $urlService)
     {
@@ -102,8 +103,14 @@ class UrlController extends ApiController
      */
     public function show(int $id)
     {
-        $url = $this->urlService->show($id);
-        return $this->responseSuccess('get data successfully', new UrlResource($url));
+        try {
+            $url = $this->urlService->getUrlById($id);
+            return $this->responseSuccess('get data successfully', new UrlResource($url));
+
+        } catch (ModelNotFoundException $e) {
+            return $this->responseNotFound('Url Not found', "Not Found");
+
+        }
     }
 
     /**
@@ -148,6 +155,7 @@ class UrlController extends ApiController
         $url = $this->urlService->create($data);
 
         return $this->responseCreated('item successfully created', new UrlResource($url));
+
     }
 
     /**
@@ -175,7 +183,14 @@ class UrlController extends ApiController
      */
     public function destroy(int $id)
     {
-        $this->urlService->delete($id);
-        return $this->responseSuccess('item successfully deleted');
+        try {
+            $url = $this->urlService->getUrlById($id);
+            $this->urlService->delete($url);
+
+            return $this->responseSuccess('item successfully deleted');
+        } catch (ModelNotFoundException $e) {
+            return $this->responseNotFound('Url Not found', "Not Found");
+
+        }
     }
 }

@@ -17,11 +17,6 @@ class UrlService
             : $query->get();
     }
 
-    public function show(int $id)
-    {
-        $url = ShortUrl::findOrFail($id);
-        return $url;
-    }
 
     public function create(array $data)
     {
@@ -29,22 +24,26 @@ class UrlService
         $url = ShortUrl::create($data);
         return $url;
     }
-    public function update(array $data, int $id)
+    public function update(ShortUrl $url, array $data)
     {
 
-        $url = ShortUrl::findOrFail($id);
         $url->update($data);
 
         return $url;
     }
 
-    public function delete(int $id)
+    public function delete(ShortUrl $url)
     {
 
-        $url = ShortUrl::findOrFail($id);
         $url->delete();
 
         return $url;
+    }
+
+    public function getUrlById(int $id)
+    {
+        // Will throw ModelNotFoundException if not found
+        return ShortUrl::findOrFail($id);
     }
 
 }
