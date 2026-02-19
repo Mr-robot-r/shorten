@@ -18,6 +18,7 @@ class CreateUrlRequest extends FormRequest
             'url' => [
                 'required',
                 'string',
+                'url'
             ],
         ];
     }

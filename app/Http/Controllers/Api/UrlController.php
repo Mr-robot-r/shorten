@@ -22,7 +22,7 @@ class UrlController extends ApiController
 
     /**
      * @OA\Get(
-     *      path="/url",
+     *      path="api/v1/url",
      *      operationId="urllist",
      *      tags={"Url"},
      *      summary="Get all urls",
@@ -72,7 +72,7 @@ class UrlController extends ApiController
 
     /**
      * @OA\Get(
-     *      path="/url/{id}",
+     *      path="api/v1/url/{id}",
      *      operationId="urlshow",
      *      tags={"Url"},
      *      summary="Get a specific url",
@@ -108,7 +108,7 @@ class UrlController extends ApiController
 
     /**
      * @OA\Post(
-     *      path="/url",
+     *      path="api/v1/url",
      *      operationId="urlstore",
      *      tags={"Url"},
      *      summary="Store a new url",
@@ -152,7 +152,7 @@ class UrlController extends ApiController
 
     /**
      * @OA\Delete(
-     *      path="/url/{id}",
+     *      path="api/v1/url/{id}",
      *      operationId="urldestroy",
      *      tags={"Url"},
      *      summary="Delete a specific url",
