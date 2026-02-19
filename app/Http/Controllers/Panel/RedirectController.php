@@ -15,10 +15,9 @@ class RedirectController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function redirect(Request $request)
+    public function redirect(string $short_code)
     {
         try {
-            $short_code = $request->input('short_code');
             $urls = $this->urlService->getUrlByCode($short_code);
 
             return redirect($urls->original_url, 301);

@@ -37,13 +37,13 @@
                             <div class="flex items-center space-x-2">
 
                                 <!-- Show -->
-                                <a href="{{ route('urls.show', $url->id) }}"
+                                <a href="{{ route('url.show', $url->id) }}"
                                     class="px-3 py-1 bg-blue-500 text-white text-sm rounded hover:bg-blue-600">
                                     Show
                                 </a>
 
                                 <!-- Delete -->
-                                <form action="{{ route('urls.destroy', $url->id) }}" method="POST"
+                                <form action="{{ route('url.destroy', $url->id) }}" method="POST"
                                     onsubmit="return confirm('Are you sure you want to delete this URL?');">
                                     @csrf
                                     @method('DELETE')

@@ -46,7 +46,7 @@ class UrlService
         return ShortUrl::findOrFail($id);
     }
 
-    public function getUrlByCode(int $code)
+    public function getUrlByCode(string $code)
     {
         // Will throw ModelNotFoundException if not found
         return ShortUrl::where('short_code', $code)->firstOrFail();

@@ -10,4 +10,4 @@ Route::prefix('home')->group(function () {
 
 });
 
-Route::get('{short_code}', [RedirectController::class, 'redirect']);
+Route::get('/{short_code}', [RedirectController::class, 'redirect']);
