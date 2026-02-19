@@ -153,8 +153,8 @@ class UrlController extends ApiController
         unset($data['url']);
 
         $url = $this->urlService->create($data);
-
-        return $this->responseCreated('item successfully created', new UrlResource($url));
+        $res['short_url'] = url('/') . "/" . $url['short_code'];
+        return $this->responseCreated('item successfully created', $res);
 
     }
 
