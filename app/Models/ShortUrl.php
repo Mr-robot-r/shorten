@@ -48,7 +48,7 @@ class ShortUrl extends Model
     ];
 
 
-    public function generateUniqueShortCode(): string
+    static function generateUniqueShortCode(): string
     {
         do {
             $code = Str::random(6);
