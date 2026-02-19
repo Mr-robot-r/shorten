@@ -2,8 +2,15 @@
 @section('title', 'Url List')
 
 @section('content')
-    <h1 class="text-3xl font-bold mb-6">Url List</h1>
 
+    <div class="flex items-center justify-between mb-6">
+        <h1 class="text-3xl font-bold">Url List</h1>
+
+        <a href="{{ route('urlpanel.create') }}"
+            class="px-6 py-3 bg-blue-500 text-white font-medium rounded-lg hover:bg-indigo-700 transition">
+            create
+        </a>
+    </div>
     <div class="overflow-x-auto bg-white rounded-lg shadow overflow-y-auto relative">
         <table class="border-collapse table-auto w-full whitespace-no-wrap bg-white table-striped relative">
             <thead>
@@ -37,13 +44,13 @@
                             <div class="flex items-center space-x-2">
 
                                 <!-- Show -->
-                                <a href="{{ route('url.show', $url->id) }}"
+                                <a href="{{ route('urlpanel.show', $url->id) }}"
                                     class="px-3 py-1 bg-blue-500 text-white text-sm rounded hover:bg-blue-600">
                                     Show
                                 </a>
 
                                 <!-- Delete -->
-                                <form action="{{ route('url.destroy', $url->id) }}" method="POST"
+                                <form action="{{ route('urlpanel.destroy', $url->id) }}" method="POST"
                                     onsubmit="return confirm('Are you sure you want to delete this URL?');">
                                     @csrf
                                     @method('DELETE')

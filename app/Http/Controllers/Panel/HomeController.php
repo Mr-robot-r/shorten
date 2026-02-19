@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Panel;
 
 use App\Http\Controllers\Controller;
 use App\Services\UrlService;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 
 class HomeController extends Controller
@@ -25,7 +26,7 @@ class HomeController extends Controller
      */
     public function create()
     {
-        //
+        return view('create');
     }
 
     /**
@@ -33,31 +34,27 @@ class HomeController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'original_url' => 'required|url',
+        ]);
+
+        $url = $this->urlService->create($request->all());
+
+        return redirect()->route('urlpanel.show', $url->id);
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(int $id)
     {
-        //
-    }
+        try {
+            $url = $this->urlService->getUrlById($id);
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
+            return view('show', compact('url'));
+        } catch (ModelNotFoundException $e) {
+            abort(404);
+        }
     }
 
     /**
@@ -65,6 +62,14 @@ class HomeController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        try {
+            $url = $this->urlService->getUrlById($id);
+            $this->urlService->delete($url);
+
+            return redirect('home');
+        } catch (ModelNotFoundException $e) {
+            abort(404);
+
+        }
     }
 }

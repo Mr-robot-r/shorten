@@ -20,8 +20,6 @@
             <a href="{{ url('/') }}" class="text-xl font-bold text-indigo-600">MyApp</a>
             <nav class="space-x-4">
                 <a href="/" class="hover:text-indigo-500">Home</a>
-                <a href="/about" class="hover:text-indigo-500">About</a>
-                <a href="/contact" class="hover:text-indigo-500">Contact</a>
             </nav>
         </div>
     </header>
