@@ -21,7 +21,7 @@ class ShortUrl extends Model
      */
     protected $fillable = [
         "original_url",
-        "short_url",
+        "short_code",
         "status",
         "click",
     ];
@@ -52,7 +52,7 @@ class ShortUrl extends Model
     {
         do {
             $code = Str::random(6);
-        } while (ShortUrl::where('short_url', $code)->exists());
+        } while (ShortUrl::where('short_code', $code)->exists());
 
         return $code;
     }

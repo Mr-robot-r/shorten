@@ -9,7 +9,7 @@ use Illuminate\Support\Str;
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\ShortUrl>
  */
-class UrlFactory extends Factory
+class ShortUrlFactory extends Factory
 {
 
     /**

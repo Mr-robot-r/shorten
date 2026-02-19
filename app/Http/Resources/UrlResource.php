@@ -16,7 +16,7 @@ class UrlResource extends JsonResource
     {
         return [
             "url" => $this->original_url,
-            "short_url" => $this->short_url,
+            "short_code" => $this->short_code,
             "status" => $this->status,
             "click" => $this->click,
         ];

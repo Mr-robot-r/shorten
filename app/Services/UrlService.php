@@ -25,7 +25,7 @@ class UrlService
 
     public function create(array $data)
     {
-        $data['short_url'] = ShortUrl::generateUniqueShortCode();
+        $data['short_code'] = ShortUrl::generateUniqueShortCode();
         $url = ShortUrl::create($data);
         return $url;
     }
