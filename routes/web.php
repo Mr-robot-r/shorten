@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::prefix('home')->group(function () {
     // Route::get('',das)
-    Route::resource('', HomeController::class);
+    Route::resource('', HomeController::class)->names('url');
 
 });
 

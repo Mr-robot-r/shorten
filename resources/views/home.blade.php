@@ -34,8 +34,25 @@
                         <td class="py-3 px-4 border-b border-gray-300">{{ $url->click }}</td>
                         <td class="py-3 px-4 border-b border-gray-300">{{ $url->created_at->format('Y-m-d') }}</td>
                         <td class="py-3 px-4 border-b border-gray-300">
-                            <div class="d-flex flex-row">
-                                
+                            <div class="flex items-center space-x-2">
+
+                                <!-- Show -->
+                                <a href="{{ route('urls.show', $url->id) }}"
+                                    class="px-3 py-1 bg-blue-500 text-white text-sm rounded hover:bg-blue-600">
+                                    Show
+                                </a>
+
+                                <!-- Delete -->
+                                <form action="{{ route('urls.destroy', $url->id) }}" method="POST"
+                                    onsubmit="return confirm('Are you sure you want to delete this URL?');">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit"
+                                        class="px-3 py-1 bg-red-500 text-white text-sm rounded hover:bg-red-600">
+                                        Delete
+                                    </button>
+                                </form>
+
                             </div>
                         </td>
                     </tr>
