@@ -19,7 +19,8 @@ class RedirectController extends Controller
     {
         try {
             $urls = $this->urlService->getUrlByCode($short_code);
-
+            $urls->click += 1;
+            $urls->save();
             return redirect($urls->original_url, 301);
         } catch (ModelNotFoundException $e) {
             return view(404);
