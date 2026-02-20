@@ -10,7 +10,7 @@ class UrlService
 
     public function list(Request $request)
     {
-        $query = ShortUrl::query();
+        $query = ShortUrl::query()->orderBy('id', 'desc');
         $perPage = $request->input('perPage') ?? 20;
         return $perPage
             ? $query->paginate($perPage)
