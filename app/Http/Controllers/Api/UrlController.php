@@ -8,144 +8,146 @@ use App\Http\Resources\UrlResource;
 use App\Services\UrlService;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
+use OpenApi\Attributes as OA;
 
-/**
- * @OA\Tag(
- *     name="Url",
- *     description="Endpoints for managing Url"
- * )
- */
+#[OA\Tag(
+    name: "Url",
+    description: "Endpoints for managing Url"
+)]
 class UrlController extends ApiController
 {
-    public function __construct(private readonly UrlService $urlService)
-    {
+    public function __construct(
+        private readonly UrlService $urlService
+    ) {
     }
 
-    /**
-     * @OA\Get(
-     *      path="/api/v1/url",
-     *      operationId="urllist",
-     *      tags={"Url"},
-     *      summary="Get all urls",
-     *      description="Retrieves all urls.",
-     *      @OA\Parameter(
-     *          name="page",
-     *          in="query",
-     *          required=true,
-     *          description="page of the urls list",
-     *          @OA\Schema(type="integer", format="int64")
-     *      ),
-     *      @OA\Parameter(
-     *          name="perPage",
-     *          in="query",
-     *          required=true,
-     *          description="PerPage of the urls list",
-     *          @OA\Schema(type="integer", format="int64")
-     *      ),
-     *      @OA\Response(
-     *          response=200,
-     *          description="urls retrieved successfully",
-     *          @OA\JsonContent(
-     *              @OA\Property(property="message", type="string", example="urls are retrieved successfully or No urls found!"),
-     *              @OA\Property(property="data", type="array",
-     *                  @OA\Items(
-     *                      @OA\Property(property="id", type="integer", example=1),
-     *                      @OA\Property(property="status", type="string", example="active"),
-     *                      @OA\Property(property="url", type="string", example="https://panel.sheltertm.com/ip/1b552f7268428a1"),
-     *                      @OA\Property(property="short_url", type="string", example="abcd"),
-     *                      @OA\Property(property="click", type="integer", example=10)
-     *                  )
-     *              )
-     *          )
-     *      )
-     * )
-     */
+    #[OA\Get(
+        path: "/api/v1/url",
+        operationId: "urlList",
+        tags: ["Url"],
+        summary: "Get all urls",
+        description: "Retrieves paginated list of urls",
+        parameters: [
+            new OA\Parameter(
+                name: "page",
+                in: "query",
+                required: true,
+                description: "Page number",
+                schema: new OA\Schema(type: "integer", example: 1)
+            ),
+            new OA\Parameter(
+                name: "perPage",
+                in: "query",
+                required: true,
+                description: "Items per page",
+                schema: new OA\Schema(type: "integer", example: 10)
+            )
+        ],
+        responses: [
+            new OA\Response(
+                response: 200,
+                description: "Urls retrieved successfully",
+                content: new OA\JsonContent(
+                    properties: [
+                        new OA\Property(property: "message", type: "string", example: "get data successfully"),
+                        new OA\Property(
+                            property: "data",
+                            type: "array",
+                            items: new OA\Items(
+                                properties: [
+                                    new OA\Property(property: "id", type: "integer", example: 1),
+                                    new OA\Property(property: "status", type: "string", example: "active"),
+                                    new OA\Property(property: "url", type: "string", example: "https://example.com"),
+                                    new OA\Property(property: "short_url", type: "string", example: "abcd"),
+                                    new OA\Property(property: "click", type: "integer", example: 10),
+                                ]
+                            )
+                        )
+                    ]
+                )
+            )
+        ]
+    )]
     public function index(Request $request)
     {
         $urls = $this->urlService->list($request);
+
         $response = UrlResource::collection($urls)
             ->response()
             ->getData(true);
 
         unset($response['links']);
+
         return $this->responseSuccess('get data successfully', $response);
     }
 
-    /**
-     * @OA\Get(
-     *      path="/api/v1/url/{id}",
-     *      operationId="urlshow",
-     *      tags={"Url"},
-     *      summary="Get a specific url",
-     *      description="Retrieves a specific url by its ID.",
-     *      @OA\Parameter(
-     *          name="id",
-     *          in="path",
-     *          required=true,
-     *          description="ID of the url",
-     *          @OA\Schema(type="integer", format="int64")
-     *      ),
-     *      @OA\Response(
-     *          response=200,
-     *          description="url retrieved successfully",
-     *          @OA\JsonContent(
-     *              @OA\Property(property="message", type="string", example="url retrieved successfully or No url found!"),
-     *              @OA\Property(property="data", type="object",
-     *                  @OA\Property(property="id", type="integer", example=1),
-     *                  @OA\Property(property="status", type="string", example="active"),
-     *                  @OA\Property(property="url", type="string", example="https://panel.sheltertm.com/ip/1b552f7268428a1"),
-     *                  @OA\Property(property="short_url", type="string", example="abcd"),
-     *                  @OA\Property(property="click", type="integer", example=10)
-     *              )
-     *          )
-     *      )
-     * )
-     */
+    #[OA\Get(
+        path: "/api/v1/url/{id}",
+        operationId: "urlShow",
+        tags: ["Url"],
+        summary: "Get specific url",
+        parameters: [
+            new OA\Parameter(
+                name: "id",
+                in: "path",
+                required: true,
+                description: "Url ID",
+                schema: new OA\Schema(type: "integer", example: 1)
+            )
+        ],
+        responses: [
+            new OA\Response(
+                response: 200,
+                description: "Url retrieved successfully"
+            ),
+            new OA\Response(
+                response: 404,
+                description: "Url not found"
+            )
+        ]
+    )]
     public function show(int $id)
     {
         try {
             $url = $this->urlService->getUrlById($id);
-            return $this->responseSuccess('get data successfully', new UrlResource($url));
-
-        } catch (ModelNotFoundException $e) {
+            return $this->responseSuccess(
+                'get data successfully',
+                new UrlResource($url)
+            );
+        } catch (ModelNotFoundException) {
             return $this->responseNotFound('Url Not found', "Not Found");
-
         }
     }
 
-    /**
-     * @OA\Post(
-     *      path="/api/v1/url",
-     *      operationId="urlstore",
-     *      tags={"Url"},
-     *      summary="Store a new url",
-     *      description="Store a new url.",
-     *      @OA\RequestBody(
-     *          required=true,
-     *          @OA\MediaType(
-     *              mediaType="application/json",
-     *              @OA\Schema(
-     *                  required={"url"},
-     *                  @OA\Property(property="url", type="string", example="https://panel.sheltertm.com/ip/1b552f7268428a1")
-     *              )
-     *          )
-     *      ),
-     *      @OA\Response(
-     *          response=201,
-     *          description="url created successfully",
-     *          @OA\JsonContent(
-     *              @OA\Property(property="message", type="string", example="url successfully created"),
-     *              @OA\Property(property="data", type="object",
-     *                  @OA\Property(property="id", type="integer", example=1),
-     *                  @OA\Property(property="status", type="string", example="active"),
-     *                  @OA\Property(property="url", type="string", example="https://panel.sheltertm.com/ip/1b552f7268428a1"),
-     *                  @OA\Property(property="short_url", type="string", example="abcd"),
-     *                  @OA\Property(property="click", type="integer", example=10)
-     *              )
-     *          )
-     *      )
-     * )
-     */
+    #[OA\Post(
+        path: "/api/v1/url",
+        operationId: "urlStore",
+        tags: ["Url"],
+        summary: "Create new url",
+        requestBody: new OA\RequestBody(
+            required: true,
+            content: new OA\JsonContent(
+                required: ["url"],
+                properties: [
+                    new OA\Property(
+                        property: "url",
+                        type: "string",
+                        example: "https://example.com"
+                    )
+                ]
+            )
+        ),
+        responses: [
+            new OA\Response(
+                response: 201,
+                description: "Url created successfully"
+            ),
+            new OA\Response(
+                response: 422,
+                description: "Validation error"
+            )
+        ]
+    )]
     public function store(CreateUrlRequest $request)
     {
         $data = $request->validated();
@@ -153,34 +155,37 @@ class UrlController extends ApiController
         unset($data['url']);
 
         $url = $this->urlService->create($data);
-        $res['short_url'] = url('/') . "/" . $url['short_code'];
-        return $this->responseCreated('item successfully created', $res);
 
+        $res['short_url'] = url('/') . "/" . $url['short_code'];
+
+        return $this->responseCreated('item successfully created', $res);
     }
 
-    /**
-     * @OA\Delete(
-     *      path="/api/v1/url/{id}",
-     *      operationId="urldestroy",
-     *      tags={"Url"},
-     *      summary="Delete a specific url",
-     *      description="Deletes a specific url by its ID.",
-     *      @OA\Parameter(
-     *          name="id",
-     *          in="path",
-     *          required=true,
-     *          description="ID of the url",
-     *          @OA\Schema(type="integer", format="int64")
-     *      ),
-     *      @OA\Response(
-     *          response=200,
-     *          description="url deleted successfully",
-     *          @OA\JsonContent(
-     *              @OA\Property(property="message", type="string", example="url successfully deleted")
-     *          )
-     *      )
-     * )
-     */
+    #[OA\Delete(
+        path: "/api/v1/url/{id}",
+        operationId: "urlDestroy",
+        tags: ["Url"],
+        summary: "Delete specific url",
+        parameters: [
+            new OA\Parameter(
+                name: "id",
+                in: "path",
+                required: true,
+                description: "Url ID",
+                schema: new OA\Schema(type: "integer", example: 1)
+            )
+        ],
+        responses: [
+            new OA\Response(
+                response: 200,
+                description: "Url deleted successfully"
+            ),
+            new OA\Response(
+                response: 404,
+                description: "Url not found"
+            )
+        ]
+    )]
     public function destroy(int $id)
     {
         try {
@@ -188,9 +193,8 @@ class UrlController extends ApiController
             $this->urlService->delete($url);
 
             return $this->responseSuccess('item successfully deleted');
-        } catch (ModelNotFoundException $e) {
+        } catch (ModelNotFoundException) {
             return $this->responseNotFound('Url Not found', "Not Found");
-
         }
     }
 }

@@ -1,0 +1,183 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "Shorten API",
+        "version": "1.0.0"
+    },
+    "paths": {
+        "/api/v1/url": {
+            "get": {
+                "tags": [
+                    "Url"
+                ],
+                "summary": "Get all urls",
+                "description": "Retrieves paginated list of urls",
+                "operationId": "urlList",
+                "parameters": [
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "description": "Page number",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": 1
+                        }
+                    },
+                    {
+                        "name": "perPage",
+                        "in": "query",
+                        "description": "Items per page",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": 10
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Urls retrieved successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "get data successfully"
+                                        },
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "properties": {
+                                                    "id": {
+                                                        "type": "integer",
+                                                        "example": 1
+                                                    },
+                                                    "status": {
+                                                        "type": "string",
+                                                        "example": "active"
+                                                    },
+                                                    "url": {
+                                                        "type": "string",
+                                                        "example": "https://example.com"
+                                                    },
+                                                    "short_url": {
+                                                        "type": "string",
+                                                        "example": "abcd"
+                                                    },
+                                                    "click": {
+                                                        "type": "integer",
+                                                        "example": 10
+                                                    }
+                                                },
+                                                "type": "object"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Url"
+                ],
+                "summary": "Create new url",
+                "operationId": "urlStore",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "url"
+                                ],
+                                "properties": {
+                                    "url": {
+                                        "type": "string",
+                                        "example": "https://example.com"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Url created successfully"
+                    },
+                    "422": {
+                        "description": "Validation error"
+                    }
+                }
+            }
+        },
+        "/api/v1/url/{id}": {
+            "get": {
+                "tags": [
+                    "Url"
+                ],
+                "summary": "Get specific url",
+                "operationId": "urlShow",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Url ID",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": 1
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Url retrieved successfully"
+                    },
+                    "404": {
+                        "description": "Url not found"
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Url"
+                ],
+                "summary": "Delete specific url",
+                "operationId": "urlDestroy",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Url ID",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": 1
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Url deleted successfully"
+                    },
+                    "404": {
+                        "description": "Url not found"
+                    }
+                }
+            }
+        }
+    },
+    "tags": [
+        {
+            "name": "Url",
+            "description": "Endpoints for managing Url"
+        }
+    ]
+}
